@@ -37,13 +37,7 @@ Without a recognised ask Grace falls back to the full package and says so. A sen
 | Day 2 | Rs 1.50 | research, scout, sage, mira, nova skipped from memory; only vera/kai/summary call llm |
 | 50 users | Rs 17.10 | user 1 pays Rs 6.10; users 2-50 share research + sandbox + llm caches (avg Rs 0.22). 50 isolated runs = Rs 305 |
 
-## Assumptions (please challenge them)
-- `catalog()` (url, type, company, date, flag, title; **no content**) is free. It stands in for a search index. Without it, picking pages costs a read each.
-- The interview date is not in the data: `days_left = 14` and 1.5 study hours/day are assumptions, printed in Lyra's output.
-- llm output is treated as a pure function of its prompt (like temperature 0), so identical prompts hit a cache. Prompts contain only structured, screened data, never raw page text.
-- Cohort users share the **company-level** research artifact only (no personal data).
-- The 2 browser-only threads are skipped when >= 3 fetchable reports exist. This costs coverage: the "customers without orders" and "Nth highest" questions appear only there. The card says so.
-- Sage grades only what the data contains (two coding answers). Aptitude / Excel are test shells with no item bank. Vera reports readiness, it does not score live answers (nobody is answering).
+
 
 - Intent detection is keyword matching: fine for clear asks, weak on unusual phrasing.
 
