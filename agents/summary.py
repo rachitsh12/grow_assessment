@@ -2,7 +2,7 @@
 (main.py calls build_card directly if this step itself fails)."""
 import json
 
-from agents.common import claim_gap, src
+from agents.common import claim_gap
 
 SPEC = {"reads": ["goal"],
         "optional_reads": ["scout", "resume", "test", "vera", "kai", "lyra", "nova", "actions", "approvals",

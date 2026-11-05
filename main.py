@@ -96,7 +96,13 @@ def parse_args():
     ap.add_argument("--say", default=None, metavar="SENTENCE", help="a different sentence (default: the assessment's)")
     ap.add_argument("--verbose", "-v", action="store_true", help="print each step's output and memory notes")
     ap.add_argument("--approve", action="store_true", help="the user OKs pending apply/post actions")
-    return ap.parse_args()
+    a = ap.parse_args()
+    bad = [x for x in a.fail + a.flaky if x not in AGENTS]
+    if bad:
+        ap.error(f"unknown agent(s) {bad}; choose from {', '.join(AGENTS)}")
+    if a.users < 1 or a.day < 1:
+        ap.error("--users and --day must be >= 1")
+    return a
 
 
 async def main():

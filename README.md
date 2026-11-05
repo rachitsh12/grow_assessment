@@ -30,6 +30,27 @@ The sentence is parsed into intents with keyword patterns (no llm cost), each in
 
 Without a recognised ask Grace falls back to the full package and says so. A sentence with no role or company is rejected with a message.
 
+## How it flows (start to finish)
+1. **Intake.** The sentence is parsed into role, company, city and intent. Intent is keyword matching, so it costs nothing. The assessment's sentence is `get_hired`, the full package; "Fix my resume" is a much smaller plan. Before planning, Grace recalls from memory: Priya's own words, scores and saved results.
+2. **Plan as data.** Grace maps the intent to agents, then adds what they need: research, the approval step and the summary. Memory removes steps that are already done. Each step records its dependencies, what it reads and writes, and why it is in the plan. A validator rejects cycles, two steps writing the same key, and reads that nobody produces.
+3. **Research once.** It is the only step that touches the web. It screens the free metadata first, dropping the TCS pages, the scam page and the stale report, then fetches 11 pages. It skips the two browser-only threads because four fetchable reports are enough, saving Rs 10. Every fact keeps its URL and date.
+4. **Waves in parallel.** w1: Scout, Sage, Mira. w2: Kai, Vera, Lyra, Nova. Each step reads only the keys it declared and buffers its writes, which commit only if it succeeds. A hard dependency failure skips a step; a soft one runs it degraded.
+5. **What they produce.**
+   - Sage runs her SQL in the sandbox; the wrong INNER JOIN scores 40%.
+   - Her claim "I'm good at SQL" and the 40% are both kept in memory, but planning follows the measurement.
+   - Vera and Kai ask what Infosys actually asked, with source and date.
+   - Mira only lists skills her records support.
+6. **Approval.** Scout and Nova only draft. Only the approval step can mark something applied or posted, and only with the user's OK (`--approve`).
+7. **Close.** Grace builds one summary card. Memory and artifacts are saved, so Day 2 reuses research and scores. The trace shows every step. Day 1 costs Rs 6.10, against about Rs 160 if every agent browsed.
+
+```
+sentence -> intents + role/company/city -> recall memory -> plan (validated)
+  w0 research
+  w1 scout | sage | mira
+  w2 kai | vera | lyra | nova
+  w3 approval  ->  w4 summary card  ->  save memory  ->  cost
+```
+
 ## What the numbers say (demo data)
 | run | spend | why |
 |---|---|---|

@@ -1,7 +1,7 @@
 """Mira: tailors the resume. Only real records and claimed skills WITH evidence; never invents jobs/degrees/certs."""
 import json
 
-from agents.common import cgpa_of, profile_skills, skill_gaps, skill_label, src
+from agents.common import profile_skills, skill_gaps, skill_label, src
 
 SPEC = {"reads": ["profile"], "optional_reads": ["research.job", "research.resumes", "memory.recall", "memory.brief"],
         "writes": ["resume"]}

@@ -42,12 +42,12 @@ Python 3.11+, stdlib only (asyncio, dataclasses, json, sqlite3, argparse). No fr
 | research | goal | research.* (job, interviews, test_format, resumes, news, tips, rejected, skipped_browse, confidence) |
 | scout | goal, profile, research.job | scout.*, actions.scout |
 | sage | goal, profile, research.interviews/job/test_format, memory | test.* (sections, results) |
-| mira | profile, research.job/resumes | resume.* (sections, gaps) |
-| kai | goal, profile, research.*, memory | kai.* |
+| mira | profile, research.job/resumes (optional), memory | resume.* (sections, gaps, section_order) |
+| kai | goal, profile, research.* (optional), test.results, memory | kai.* |
 | vera | goal, profile, research.interviews, test, memory | vera.* |
 | lyra | resume.gaps, test.results, research.*, memory | lyra.* |
 | nova | profile, research.news, test.results, memory | nova.*, actions.nova |
-| approval | actions, resume | approvals |
+| approval | actions | approvals |
 | grace_summary | everything | card |
 
 ## Added while building (what the code actually does)
@@ -59,4 +59,5 @@ Python 3.11+, stdlib only (asyncio, dataclasses, json, sqlite3, argparse). No fr
 - **Fallback card:** if `grace_summary` itself fails, `main.py` builds the card from state without an llm call.
 - **Intent selection vs memory.** Intent decides who is *needed*; memory then decides who can be *skipped* because the result is already known. The skip list keeps both kinds of reason ("not needed for intent: fix_resume" vs "scores already known").
 - **The card only describes what ran.** A resume-only plan never says "no job found", because Scout was not part of it.
+- **What "parallel" means here.** The executor runs each wave with `asyncio.gather`, and the plan's dependency graph is what makes steps safe to run concurrently. The agents themselves contain no real I/O waits (tools are stubs), so in this skeleton they execute one after another and wave time is *simulated* as the slowest step (sequential time is printed next to it). With real network tools the same code overlaps the waits unchanged.
 
